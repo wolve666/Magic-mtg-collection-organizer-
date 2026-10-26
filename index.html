@@ -43,7 +43,7 @@ small{opacity:.7}
 #sq{width:100%;font-size:17px}
 </style></head><body>
 <nav>
-<span class="ver">v1.4</span>
+<span class="ver">v1.5</span>
 <button class="on" data-t="pre">Prelievo mazzo</button>
 <button data-t="col">Collezione</button>
 <button data-t="ric">Ricerca</button>
@@ -390,8 +390,11 @@ function loadGis(){return new Promise((ok,ko)=>{
 async function gauth(){
   if(gtok&&Date.now()<gexp)return gtok;
   if(location.protocol=='file:')throw new Error('Google non accetta i file locali: apri l\'app da un indirizzo https.');
-  const cid=$('#gid').value.trim();if(!cid)throw new Error('Inserisci prima il Client ID di Google.');
-  setMeta({cid});
+  const cid=$('#gid').value.replace(/[^\x21-\x7E]/g,'');
+  if(!cid)throw new Error('Inserisci prima il Client ID di Google.');
+  if(!/^\d+-[a-z0-9]+\.apps\.googleusercontent\.com$/i.test(cid))throw new Error('Il Client ID non ha il formato giusto: deve essere come 123456789012-abc...xyz.apps.googleusercontent.com (letti '+cid.length+' caratteri).');
+  $('#gid').value=cid;setMeta({cid});
+  gmsg('Accesso con il Client ID che inizia con '+cid.slice(0,8)+' e finisce con '+cid.slice(-26)+' ('+cid.length+' caratteri)…');
   if(!(window.google&&google.accounts))await loadGis();
   return new Promise((ok,ko)=>google.accounts.oauth2.initTokenClient({
     client_id:cid,scope:'https://www.googleapis.com/auth/drive.appdata',
