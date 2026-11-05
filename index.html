@@ -122,7 +122,7 @@ setTimeout(function(){var s=document.getElementById('splash');if(s)s.remove()},1
 <div id="errb" onclick="this.style.display='none'" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:30;background:#b3382f;color:#fff;padding:10px 14px;font-size:13px"></div>
 <div id="splash"><img src="icon-192.png" alt=""><div class="sn">Libreria Carte</div></div>
 <div id="top">
-<header><div><span class="ttl">Libreria Carte</span><span class="ver">v1.11</span></div><button id="thm" aria-label="Cambia tema">Auto</button></header>
+<header><div><span class="ttl">Libreria Carte</span><span class="ver">v1.12</span></div><button id="thm" aria-label="Cambia tema">Auto</button></header>
 <nav>
 <button class="on" data-t="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></button>
 <button data-t="pre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M3.5 6l1.5 1.5L7 5M3.5 12l1.5 1.5L7 11M3.5 18l1.5 1.5L7 17"/></svg><span>Prelievo</span></button>
@@ -532,8 +532,14 @@ async function push(first){
     stat(`${db.cards.length} righe, inviate ${ks.length} modifiche`);
   }catch(e){ks.forEach(k=>delete sent[k]);gmsg(fbErr(e));clearTimeout(pt);pt=setTimeout(()=>push(),10000)}
 }
-async function fbStart(user){
-  if(fb.on&&fb.uid==user.uid)return;
+function fbStart(user){
+  if(fb.on&&fb.uid==user.uid)return Promise.resolve();
+  if(fb.p&&fb.puid==user.uid)return fb.p;
+  fb.puid=user.uid;
+  fb.p=fbStart0(user).finally(()=>{fb.p=null});
+  return fb.p;
+}
+async function fbStart0(user){
   fb.uid=user.uid;fb.ref=firebase.database().ref('users/'+user.uid+'/cards');
   gmsg('Collego il cloud…');
   const remote=(await withTimeout(fb.ref.once('value'),25000,'Il cloud non risponde: controlla la connessione e le regole del database.')).val()||{};
@@ -575,7 +581,8 @@ $('#fbin').onclick=async()=>{try{
   if(!em||!pw)throw new Error('Inserisci email e password.');
   setMeta({fbt:t,fbe:em});gmsg('Accesso in corso…');
   await fbInit(cfg);
-  await firebase.auth().signInWithEmailAndPassword(em,pw);
+  const cr=await withTimeout(firebase.auth().signInWithEmailAndPassword(em,pw),30000,'Il server di accesso non risponde: controlla la connessione.');
+  await fbStart(cr.user);stat(db.cards.length+' righe');
 }catch(e){gmsg(fbErr(e))}};
 $('#fbout').onclick=async()=>{try{if(window.firebase&&firebase.apps.length)await firebase.auth().signOut()}catch(e){}fb.on=false;stat()};
 if(meta().fbe)fbInit(meta().fbt?parseCfg(meta().fbt):FBCFG).catch(e=>gmsg(fbErr(e)));
