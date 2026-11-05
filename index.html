@@ -116,7 +116,7 @@ section.on{animation:fadein .25s ease-out}
 </style></head><body>
 <div id="splash"><img src="icon-192.png" alt=""><div class="sn">Libreria Carte</div></div>
 <div id="top">
-<header><div><span class="ttl">Libreria Carte</span><span class="ver">v1.8</span></div><button id="thm" aria-label="Cambia tema">Auto</button></header>
+<header><div><span class="ttl">Libreria Carte</span><span class="ver">v1.9</span></div><button id="thm" aria-label="Cambia tema">Auto</button></header>
 <nav>
 <button class="on" data-t="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></button>
 <button data-t="pre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M3.5 6l1.5 1.5L7 5M3.5 12l1.5 1.5L7 11M3.5 18l1.5 1.5L7 17"/></svg><span>Prelievo</span></button>
@@ -188,7 +188,7 @@ section.on{animation:fadein .25s ease-out}
 <section id="cld">
 <h3>Sincronizzazione automatica (Firebase)</h3>
 <p><small>Le modifiche arrivano da sole agli altri dispositivi collegati. Offline l'app funziona lo stesso e si allinea al ritorno della connessione.</small></p>
-<div class="row"><textarea id="fbcfg" placeholder="Incolla qui la configurazione Firebase (il blocco firebaseConfig)" style="height:90px"></textarea></div>
+<details><summary><small>Configurazione Firebase (già inclusa: serve solo per usare un altro progetto)</small></summary><div class="row"><textarea id="fbcfg" placeholder="Incolla qui un blocco firebaseConfig diverso, oppure lascia vuoto" style="height:90px"></textarea></div></details>
 <div class="row"><input id="fbem" type="email" placeholder="Email"><input id="fbpw" type="password" placeholder="Password"></div>
 <div class="row"><button class="p" id="fbin">Accedi e sincronizza</button><button id="fbout">Esci</button></div>
 <p id="gst"></p>
@@ -486,6 +486,7 @@ $('#sl').onclick=e=>{
 const meta=()=>{try{return JSON.parse(localStorage.getItem('libmeta'))||{}}catch(e){return{}}};
 const setMeta=o=>{try{localStorage.setItem('libmeta',JSON.stringify({...meta(),...o}))}catch(e){}};
 const gmsg=t=>{$('#gst').textContent=t};
+const FBCFG={apiKey:'AIzaSyDASqHvt6sh2zLf62n6s1GHOyEDZ0iWMQ0',authDomain:'libreria-mtg.firebaseapp.com',databaseURL:'https://libreria-mtg-default-rtdb.europe-west1.firebasedatabase.app',projectId:'libreria-mtg',appId:'1:595973958368:web:6604b3c3e9fb2c94e43e85'};
 const fb={on:false,uid:null,ref:null,off:0,conn:true};
 let sent={},pt,rt,fbReady=false;
 const fbNow=()=>Date.now()+(fb.off||0);
@@ -559,7 +560,7 @@ async function fbInit(cfg){
 function parseCfg(t){const o={};for(const m of t.matchAll(/([A-Za-z]\w*)\s*:\s*["']([^"']+)["']/g))o[m[1]]=m[2];return o}
 $('#fbcfg').value=meta().fbt||'';$('#fbem').value=meta().fbe||'';
 $('#fbin').onclick=async()=>{try{
-  const t=$('#fbcfg').value.trim(),cfg=parseCfg(t);
+  const t=$('#fbcfg').value.trim(),cfg=t?parseCfg(t):FBCFG;
   if(!cfg.apiKey||!cfg.projectId)throw new Error('Configurazione incompleta: incolla il blocco firebaseConfig, con apiKey e projectId.');
   if(!cfg.databaseURL)throw new Error('Manca databaseURL: copialo dalla pagina Realtime Database di Firebase e aggiungilo alla configurazione.');
   const em=$('#fbem').value.trim(),pw=$('#fbpw').value;
@@ -569,7 +570,7 @@ $('#fbin').onclick=async()=>{try{
   await firebase.auth().signInWithEmailAndPassword(em,pw);
 }catch(e){gmsg(fbErr(e))}};
 $('#fbout').onclick=async()=>{try{if(window.firebase&&firebase.apps.length)await firebase.auth().signOut()}catch(e){}fb.on=false;stat()};
-if(meta().fbt)fbInit(parseCfg(meta().fbt)).catch(e=>gmsg(fbErr(e)));
+if(meta().fbe)fbInit(meta().fbt?parseCfg(meta().fbt):FBCFG).catch(e=>gmsg(fbErr(e)));
 
 /* Home: numeri e scatole */
 function renderHome(){
