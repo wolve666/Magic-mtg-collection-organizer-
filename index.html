@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#081321">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mana-font@1.18.0/css/mana.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mana-font@1.18.0/css/mana.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
 <style>
 :root{--bg:#eef1f6;--surface:#ffffff;--surface2:#e1e6ef;--border:#cdd5e3;--text:#0f1a2e;--muted:#4f5b73;--ac:#1d3a6b;--onac:#ffffff;--soft:#d9e2f3;--softt:#16305c;--bad:#b3382f;--good:#1f7a4a;--warn:#8a5a00;--goodbg:#1f7a4a1f;--artA:#c3d0e8;--artB:#a2b6da;--topH:120px;--gold:#a97b1c;--glow:#ffffff99;color-scheme:light}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1426;--surface:#121f38;--surface2:#1a2a4a;--border:#2b3f66;--text:#e7edf8;--muted:#9aabc8;--ac:#7aa2ff;--onac:#0b1426;--soft:#172b52;--softt:#a9c2ff;--bad:#ff9a90;--good:#5fd391;--warn:#f0b44c;--goodbg:#5fd3911f;--artA:#213a66;--artB:#142642;--gold:#d9a441;--glow:#1d3a6b66;color-scheme:dark}}
@@ -101,7 +101,7 @@ section.on{animation:fadein .25s ease-out}
 .box .bq{font-size:12px;color:var(--muted)}
 .fill{height:5px;border-radius:3px;background:var(--surface2);overflow:hidden;margin-top:auto}
 .fill i{display:block;height:100%;background:var(--ac)}
-#splash{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:var(--bg);animation:splashout .5s ease-in .9s forwards}
+#splash{pointer-events:none;position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:var(--bg);animation:splashout .5s ease-in .9s forwards}
 #splash img{width:112px;height:112px;border-radius:24px;box-shadow:0 8px 30px rgba(0,0,0,.4);animation:splashin .6s cubic-bezier(.2,.8,.2,1)}
 #splash .sn{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:18px}
 @keyframes splashin{from{transform:scale(.7) rotateY(-70deg);opacity:0}to{transform:none;opacity:1}}
@@ -114,9 +114,15 @@ section.on{animation:fadein .25s ease-out}
 @keyframes flipin{from{transform:rotateY(-90deg) scale(.8);opacity:0}to{transform:none;opacity:1}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}#splash{display:none}}
 </style></head><body>
+<script>
+window.addEventListener('error',function(e){var b=document.getElementById('errb');if(b){b.textContent='Errore: '+e.message+(e.lineno?' (riga '+e.lineno+')':'')+' - tocca per chiudere';b.style.display='block'}});
+window.addEventListener('unhandledrejection',function(e){var b=document.getElementById('errb');if(b){b.textContent='Errore: '+String((e.reason&&e.reason.message)||e.reason)+' - tocca per chiudere';b.style.display='block'}});
+setTimeout(function(){var s=document.getElementById('splash');if(s)s.remove()},1600);
+</script>
+<div id="errb" onclick="this.style.display='none'" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:30;background:#b3382f;color:#fff;padding:10px 14px;font-size:13px"></div>
 <div id="splash"><img src="icon-192.png" alt=""><div class="sn">Libreria Carte</div></div>
 <div id="top">
-<header><div><span class="ttl">Libreria Carte</span><span class="ver">v1.9</span></div><button id="thm" aria-label="Cambia tema">Auto</button></header>
+<header><div><span class="ttl">Libreria Carte</span><span class="ver">v1.10</span></div><button id="thm" aria-label="Cambia tema">Auto</button></header>
 <nav>
 <button class="on" data-t="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></button>
 <button data-t="pre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M3.5 6l1.5 1.5L7 5M3.5 12l1.5 1.5L7 11M3.5 18l1.5 1.5L7 17"/></svg><span>Prelievo</span></button>
@@ -196,7 +202,7 @@ section.on{animation:fadein .25s ease-out}
 <div id="pv" onclick="this.style.display='none'" style="display:none;position:fixed;inset:0;background:#000c;z-index:9;align-items:center;justify-content:center;flex-direction:column;color:#fff;text-align:center"></div>
 <datalist id="ac"></datalist>
 
-<script>
+<script id="app">
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 const key=n=>String(n).trim().toLowerCase();
@@ -530,7 +536,7 @@ async function fbStart(user){
   if(fb.on&&fb.uid==user.uid)return;
   fb.uid=user.uid;fb.ref=firebase.database().ref('users/'+user.uid+'/cards');
   gmsg('Collego il cloud…');
-  const remote=(await fb.ref.once('value')).val()||{};
+  const remote=(await withTimeout(fb.ref.once('value'),25000,'Il cloud non risponde: controlla la connessione e le regole del database.')).val()||{};
   sent={};
   const conf=db.cards.filter(c=>{if(c.upd)return false;const r=remote[cardKey(c)];return r&&!r.d&&recStr(r)!==recStr(toRec(c))});
   if(conf.length&&confirm(`${conf.length} carte di questo dispositivo sono diverse da quelle nel cloud.\n\nOK = tengo le MIE (aggiorno il cloud)\nAnnulla = tengo quelle del CLOUD`)){const n=fbNow();conf.forEach(c=>{c.upd=n})}
@@ -542,10 +548,11 @@ async function fbStart(user){
   await push(true);
   later();stat(db.cards.length+' righe');
 }
+const withTimeout=(p,ms,msg)=>Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(new Error(msg)),ms))]);
 const fbErr=e=>{const c=String((e&&e.code)||'')+' '+String((e&&e.message)||'');
   return /invalid-credential|wrong-password|user-not-found|invalid-email/.test(c)?'Email o password non corrette.':/network/i.test(c)?'Nessuna connessione.':/PERMISSION_DENIED|permission/i.test(c)?'Permesso negato: controlla le regole del database e che l\'utente sia quello giusto.':(e&&e.message)||'Errore sconosciuto.'};
 function loadJs(u){return new Promise((ok,ko)=>{const sc=document.createElement('script');sc.src=u;sc.onload=ok;sc.onerror=()=>ko(new Error('Impossibile caricare Firebase: controlla la connessione.'));document.head.appendChild(sc)})}
-async function fbLoad(){if(window.firebase&&firebase.database)return;for(const m of['app','auth','database'])await loadJs(`https://www.gstatic.com/firebasejs/10.14.1/firebase-${m}-compat.js`)}
+async function fbLoad(){if(window.firebase&&firebase.database)return;for(const m of['app','auth','database'])await withTimeout(loadJs(`https://www.gstatic.com/firebasejs/10.14.1/firebase-${m}-compat.js`),20000,'Firebase non si carica: controlla la connessione.')}
 async function fbInit(cfg){
   await fbLoad();
   if(!firebase.apps.length)firebase.initializeApp(cfg);
