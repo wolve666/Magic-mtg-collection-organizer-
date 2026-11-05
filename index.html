@@ -6,51 +6,134 @@
 <meta name="theme-color" content="#081321">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/keyrune@latest/css/keyrune.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mana-font@1.18.0/css/mana.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-:root{color-scheme:light dark;--b:#8885;--ac:#2a7f8e}
+:root{--bg:#eef1f6;--surface:#ffffff;--surface2:#e1e6ef;--border:#cdd5e3;--text:#0f1a2e;--muted:#4f5b73;--ac:#1d3a6b;--onac:#ffffff;--soft:#d9e2f3;--softt:#16305c;--bad:#b3382f;--good:#1f7a4a;--warn:#8a5a00;--goodbg:#1f7a4a1f;--artA:#c3d0e8;--artB:#a2b6da;--topH:120px;--gold:#a97b1c;--glow:#ffffff99;color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1426;--surface:#121f38;--surface2:#1a2a4a;--border:#2b3f66;--text:#e7edf8;--muted:#9aabc8;--ac:#7aa2ff;--onac:#0b1426;--soft:#172b52;--softt:#a9c2ff;--bad:#ff9a90;--good:#5fd391;--warn:#f0b44c;--goodbg:#5fd3911f;--artA:#213a66;--artB:#142642;--gold:#d9a441;--glow:#1d3a6b66;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1426;--surface:#121f38;--surface2:#1a2a4a;--border:#2b3f66;--text:#e7edf8;--muted:#9aabc8;--ac:#7aa2ff;--onac:#0b1426;--soft:#172b52;--softt:#a9c2ff;--bad:#ff9a90;--good:#5fd391;--warn:#f0b44c;--goodbg:#5fd3911f;--artA:#213a66;--artB:#142642;--gold:#d9a441;--glow:#1d3a6b66;color-scheme:dark}
 *{box-sizing:border-box}
-body{font:15px/1.4 system-ui,sans-serif;margin:0}
-nav{display:flex;position:sticky;top:0;background:Canvas;border-bottom:1px solid var(--b);z-index:2}
-nav button{flex:1;padding:13px 4px;border:0;border-bottom:3px solid transparent;background:none;font:inherit;color:inherit;cursor:pointer}
-nav button.on{border-bottom-color:var(--ac);font-weight:600}
+body{font:15px/1.4 'Inter',system-ui,sans-serif;margin:0;background:var(--bg);color:var(--text)}
+h3{font-family:'Cinzel',serif}
+#top{position:sticky;top:0;z-index:3;background:var(--bg);padding-bottom:8px;border-bottom:1px solid var(--border)}
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 8px}
+.ttl{font-family:'Cinzel',serif;font-weight:700;font-size:20px;letter-spacing:.04em;text-transform:uppercase}
+.ver{font-family:'Cinzel',serif;font-weight:700;font-size:12px;letter-spacing:.06em;background:var(--ac);color:var(--onac);border-radius:4px;padding:3px 8px;margin-left:8px;white-space:nowrap}
+#thm{min-height:36px;padding:4px 12px;font-size:12px;font-weight:600}
+nav{display:flex;margin:0 12px;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+nav button{flex:1;height:44px;min-height:44px;padding:0;border:0;border-right:1px solid var(--border);border-radius:0;background:var(--surface2);color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+nav button:last-child{border-right:0}
+nav button.on{background:var(--ac);color:var(--onac);font-weight:700}
 section{display:none;padding:12px;max-width:1100px;margin:auto}
 section.on{display:block}
 .split{display:grid;gap:14px;grid-template-columns:1fr}
 @media(min-width:720px){.split{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
-input,textarea,select,button,.file{font:inherit;padding:8px;border:1px solid var(--b);border-radius:6px;background:Field;color:FieldText}
+input,textarea,select,button,.file{font:inherit;padding:8px 12px;min-height:44px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text)}
+input[type=checkbox]{min-height:0;width:22px;height:22px;padding:0;accent-color:var(--ac)}
+.file{display:inline-flex;align-items:center}
 button{cursor:pointer}
-button.p{background:var(--ac);color:#fff;border-color:var(--ac)}
+button.p{background:var(--ac);color:var(--onac);border-color:var(--ac);font-weight:600}
 textarea{width:100%;height:110px}
 .row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
 .row input{flex:1;min-width:70px}
-.item{display:flex;gap:10px;align-items:center;padding:9px 6px;border-bottom:1px solid var(--b);cursor:pointer}
-.item.sel{background:#2a7f8e30}
-.item.done .n{text-decoration:line-through;opacity:.5}
+.item{display:flex;gap:10px;align-items:center;padding:9px 6px;border-bottom:1px solid var(--border);cursor:pointer}
+.item.sel{background:var(--soft)}
+.item.done{background:var(--goodbg)}
+.item.done .n{text-decoration:line-through;opacity:.55}
 .n{flex:1}
-.loc{font-weight:700;color:var(--ac);white-space:nowrap}
-.no{color:#c0504d}
-.ok{color:#2e8b57}
+.loc{font-family:'Cinzel',serif;font-weight:700;background:var(--ac);color:var(--onac);border-radius:4px;padding:2px 8px;white-space:nowrap}
+.no{color:var(--bad)}
+.ok{color:var(--good)}
 .st{font-weight:700;min-width:5.5em;text-align:right}
-.st.ok{color:#2e8b57}
-.st.alt{color:#c98a1b}
-.ver{align-self:center;padding:0 12px;font-weight:700;font-size:13px;color:var(--ac);white-space:nowrap}
-.stk{position:sticky;top:47px;background:Canvas;z-index:1;padding:6px 0 4px;border-bottom:1px solid var(--b)}
-.item.done{background:#2e8b5720}
+.st.ok{color:var(--good)}
+.st.alt{color:var(--warn)}
+.stk{position:sticky;top:var(--topH);background:var(--bg);z-index:2;padding:6px 0 4px;border-bottom:1px solid var(--border)}
+.vt{display:flex;gap:4px}
+.vt button{width:44px;padding:0;display:flex;align-items:center;justify-content:center}
+.vt button.on{background:var(--soft);border-color:var(--ac)}
+.vt svg{stroke:var(--text)}
 img.card{width:100%;max-width:300px;border-radius:12px}
+.tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
-td{padding:5px 4px;border-bottom:1px solid var(--b)}
-small{opacity:.7}
+td{padding:5px 4px;border-bottom:1px solid var(--border)}
+small{color:var(--muted)}
 #sq{width:100%;font-size:17px}
-</style></head><body>
-<nav>
-<span class="ver">v1.5</span>
-<button class="on" data-t="pre">Prelievo mazzo</button>
-<button data-t="col">Collezione</button>
-<button data-t="ric">Ricerca</button>
-<button data-t="cld">Cloud</button>
-</nav>
+.gridc{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;margin-top:8px}
+.gh{grid-column:1/-1;font-family:'Cinzel',serif;font-weight:700;color:var(--ac);padding:10px 2px 0}
+.cc{display:flex;flex-direction:column;gap:5px;min-width:0}
+.art{position:relative;aspect-ratio:5/7;border-radius:6px;overflow:hidden;background:linear-gradient(160deg,var(--artA),var(--artB));cursor:pointer}
+.cc.on .art{outline:2px solid var(--ac);outline-offset:2px}
+.art img{width:100%;height:100%;object-fit:cover;display:block}
+.qb{position:absolute;right:5px;top:5px;background:var(--text);color:var(--bg);border-radius:4px;font-size:12px;font-weight:700;padding:1px 6px}
+.art .pk{position:absolute;right:6px;bottom:6px;width:26px;height:26px}
+.cl{display:flex;gap:6px;align-items:stretch}
+.plate{min-width:34px;height:34px;padding:0 4px;border-radius:4px;background:var(--ac);color:var(--onac);font-family:'Cinzel',serif;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center}
+.cn{font-size:12px;font-weight:600;line-height:1.15;display:flex;align-items:center;cursor:pointer;min-width:0;overflow-wrap:anywhere}
+.cm{font-size:12px;color:var(--muted)}
+#selbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:4;flex-direction:column;gap:6px;padding:8px 12px 14px;background:var(--surface);border-top:3px solid var(--ac);max-width:1100px;margin:auto}
+#selbar .srow{display:flex;gap:8px;align-items:center;justify-content:space-between}
+#selbar input{flex:1;min-width:0}
+.lnk{background:none;border:0;text-decoration:underline;color:var(--muted);min-height:34px;padding:0 4px}
 
-<section id="pre" class="on"><div class="split">
+body{background-color:var(--bg);background-image:radial-gradient(900px 420px at 50% -80px,var(--glow),transparent),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .6 0 0 0 0 .7 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");background-attachment:fixed}
+#top{border-bottom-color:color-mix(in srgb,var(--gold) 55%,transparent);box-shadow:0 4px 14px rgba(0,0,0,.12)}
+nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;height:54px;min-height:54px;font-size:11px;letter-spacing:.02em;text-transform:none}
+nav button svg{width:18px;height:18px}
+.loc,.plate{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(0,0,0,.25),0 1px 2px rgba(0,0,0,.25)}
+.art{box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.ss,.ms{font-size:1.15em;vertical-align:-1px}
+section.on{animation:fadein .25s ease-out}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.item.pop{animation:pop .4s ease-out}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.025);box-shadow:0 0 0 2px var(--good)}100%{transform:scale(1)}}
+.hero{display:flex;align-items:center;gap:14px;padding:8px 0 14px}
+.hero img{width:64px;height:64px;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.hn{font-family:'Cinzel',serif;font-weight:700;font-size:34px;line-height:1}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.stat b{display:block;font-family:'Cinzel',serif;font-size:22px}
+.stat span{font-size:12px;color:var(--muted)}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.box{position:relative;text-align:left;padding:10px 10px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface);min-height:96px;display:flex;flex-direction:column;gap:6px;box-shadow:0 2px 6px rgba(0,0,0,.12);overflow:hidden}
+.box::before{content:'';position:absolute;left:0;right:0;top:0;height:10px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.box .plate{margin-top:10px;align-self:flex-start;min-width:40px}
+.box .bq{font-size:12px;color:var(--muted)}
+.fill{height:5px;border-radius:3px;background:var(--surface2);overflow:hidden;margin-top:auto}
+.fill i{display:block;height:100%;background:var(--ac)}
+#splash{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:var(--bg);animation:splashout .5s ease-in .9s forwards}
+#splash img{width:112px;height:112px;border-radius:24px;box-shadow:0 8px 30px rgba(0,0,0,.4);animation:splashin .6s cubic-bezier(.2,.8,.2,1)}
+#splash .sn{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:18px}
+@keyframes splashin{from{transform:scale(.7) rotateY(-70deg);opacity:0}to{transform:none;opacity:1}}
+@keyframes splashout{to{opacity:0;visibility:hidden}}
+#pv{perspective:900px;touch-action:none}
+.tilt{position:relative;transform-style:preserve-3d;animation:flipin .55s cubic-bezier(.2,.8,.2,1);transition:transform .12s ease-out;border-radius:14px;will-change:transform}
+.tilt img{display:block;max-height:78vh;max-width:90vw;border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.55)}
+.glare{position:absolute;inset:0;border-radius:14px;pointer-events:none;background:radial-gradient(circle at var(--gx,50%) var(--gy,30%),rgba(255,255,255,.35),transparent 55%);mix-blend-mode:soft-light}
+.foilfx{position:absolute;inset:0;border-radius:14px;pointer-events:none;mix-blend-mode:color-dodge;opacity:.35;background:linear-gradient(115deg,transparent 20%,rgba(255,0,150,.5) 35%,rgba(0,255,220,.5) 50%,rgba(255,230,0,.5) 65%,transparent 80%);background-size:250% 250%;background-position:var(--fx,50%) 50%}
+@keyframes flipin{from{transform:rotateY(-90deg) scale(.8);opacity:0}to{transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}#splash{display:none}}
+</style></head><body>
+<div id="splash"><img src="icon-192.png" alt=""><div class="sn">Libreria Carte</div></div>
+<div id="top">
+<header><div><span class="ttl">Libreria Carte</span><span class="ver">v1.8</span></div><button id="thm" aria-label="Cambia tema">Auto</button></header>
+<nav>
+<button class="on" data-t="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></button>
+<button data-t="pre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M3.5 6l1.5 1.5L7 5M3.5 12l1.5 1.5L7 11M3.5 18l1.5 1.5L7 17"/></svg><span>Prelievo</span></button>
+<button data-t="col"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg><span>Collezione</span></button>
+<button data-t="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span>Ricerca</span></button>
+<button data-t="cld"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg><span>Cloud</span></button>
+</nav>
+</div>
+
+<section id="home" class="on">
+<div class="hero"><img src="icon-192.png" alt=""><div><div class="hn" id="hn">0</div><small>carte in collezione</small></div></div>
+<div class="stats" id="hs"></div>
+<h3>Le tue scatole</h3>
+<div class="shelf" id="hshelf"></div>
+</section>
+
+<section id="pre"><div class="split">
 <div>
 <textarea id="list" placeholder="4 Lightning Bolt&#10;1 Sol Ring&#10;(elenco in formato testo)"></textarea>
 <div class="row"><button class="p" id="load">Carica lista</button></div>
@@ -85,15 +168,16 @@ small{opacity:.7}
 <input id="cfn" placeholder="N°" size="4">
 <select id="cfl"></select>
 </div>
-<div class="row">
+<div class="row" style="justify-content:space-between;align-items:center">
 <button id="selall">Seleziona tutte le filtrate</button>
-<button id="selnone">Deseleziona</button>
-<small id="selc"></small>
-<input id="bl" placeholder="Posizione da assegnare" size="12">
-<button class="p" id="ba">Assegna</button>
+<div class="vt"><button id="vg" aria-label="Vista a griglia"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg></button><button id="vl" aria-label="Vista a elenco"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h14"/></svg></button></div>
 </div>
 </div>
 <div id="ct"></div>
+<div id="selbar">
+<div class="srow"><b id="selc"></b><button class="lnk" id="selnone">Deseleziona</button></div>
+<div class="srow"><input id="bl" placeholder="Posizione da assegnare"><button class="p" id="ba">Assegna</button></div>
+</div>
 </section>
 
 <section id="ric">
@@ -102,14 +186,12 @@ small{opacity:.7}
 </section>
 
 <section id="cld">
-<h3>Salvataggio su Google Drive</h3>
-<p><small>I dati vanno in una cartella nascosta di Drive riservata a questa app: il resto del tuo Drive non viene letto.</small></p>
-<div class="row"><input id="gid" placeholder="Client ID Google (finisce con .apps.googleusercontent.com)"></div>
-<div class="row"><button class="p" id="gsync">Accedi e sincronizza</button></div>
-<div class="row"><label><input type="checkbox" id="gauto"> Salva su Drive dopo ogni modifica (finché la sessione Google è attiva, circa 1 ora)</label></div>
-<div class="row"><button id="gup">Forza: carica su Drive</button><button id="gdown">Forza: scarica da Drive</button></div>
+<h3>Sincronizzazione automatica (Firebase)</h3>
+<p><small>Le modifiche arrivano da sole agli altri dispositivi collegati. Offline l'app funziona lo stesso e si allinea al ritorno della connessione.</small></p>
+<div class="row"><textarea id="fbcfg" placeholder="Incolla qui la configurazione Firebase (il blocco firebaseConfig)" style="height:90px"></textarea></div>
+<div class="row"><input id="fbem" type="email" placeholder="Email"><input id="fbpw" type="password" placeholder="Password"></div>
+<div class="row"><button class="p" id="fbin">Accedi e sincronizza</button><button id="fbout">Esci</button></div>
 <p id="gst"></p>
-<small>Funziona solo se la pagina è aperta da un indirizzo https, non da un file sul dispositivo. Premi "Accedi e sincronizza" ogni volta che cambi dispositivo.</small>
 </section>
 <div id="pv" onclick="this.style.display='none'" style="display:none;position:fixed;inset:0;background:#000c;z-index:9;align-items:center;justify-content:center;flex-direction:column;color:#fff;text-align:center"></div>
 <datalist id="ac"></datalist>
@@ -123,6 +205,9 @@ let db={cards:[]},deck=[],sel=-1,cache={};
 try{db=JSON.parse(localStorage.getItem('lib'))||db}catch(e){}
 const persist=()=>{try{localStorage.setItem('lib',JSON.stringify(db))}catch(e){}};
 const save=()=>{db.updatedAt=Date.now();persist();autoUp()};
+const ssi=s=>s?`<i class="ss ss-${esc(String(s).toLowerCase())} ss-fw"></i>`:'';
+const CI={Creatura:'creature',Planeswalker:'planeswalker',Terra:'land',Istantaneo:'instant',Stregoneria:'sorcery',Artefatto:'artifact',Incantesimo:'enchantment'};
+const cti=k=>CI[k]?`<i class="ms ms-${CI[k]}"></i>`:'';
 const owned=n=>{const k=key(n),f=key(n.split(' // ')[0]);return db.cards.filter(c=>{const x=key(c.name);return x===k||x===f})};
 const sameEd=(c,w)=>(c.set||'').toUpperCase()==w.set&&(!w.num||String(c.num)==w.num);
 const hit=d=>{const all=owned(d.name);if(!d.set)return{rows:all,alt:false};const ex=all.filter(c=>sameEd(c,d));return ex.length?{rows:ex,alt:false}:{rows:all,alt:all.length>0}};
@@ -130,12 +215,14 @@ const L=d=>[...new Set(hit(d).rows.map(c=>c.loc||'?'))].sort(nat);
 const locs=n=>[...new Set(owned(n).map(c=>c.loc||'?'))].sort(nat);
 
 /* Schede */
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
-  document.querySelectorAll('nav button,section').forEach(e=>e.classList.remove('on'));
-  b.classList.add('on');$('#'+b.dataset.t).classList.add('on');
-  if(b.dataset.t=='col')renderCol();
-  if(b.dataset.t=='cld')loadGis().catch(()=>{});
-});
+function go(t){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));
+  document.querySelectorAll('section').forEach(e=>e.classList.toggle('on',e.id==t));
+  if(t=='col')renderCol();
+  if(t=='home')renderHome();
+  if(window.scrollTo)window.scrollTo(0,0);
+}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.t));
 
 /* Scryfall */
 async function fetchCard(n){
@@ -149,7 +236,7 @@ async function show(n,el,want){
     const gen=c&&(c.image_uris||(c.card_faces&&c.card_faces[0].image_uris));
     const one=x=>{
       const i=(db.info||{})[ik(x)],src=(i&&i.i?i.i.replace('/small/','/normal/'):'')||(gen?gen.normal:'');
-      return `<div style="width:min(100%,260px)">${src?`<img class="card" src="${esc(src)}" alt="">`:''}<div><b class="loc">${esc(x.loc||'?')}</b> · ${x.qty}× · ${esc((db.sn||{})[x.set]||x.set)}${x.num?' #'+esc(x.num):''}${x.foil?' ✦'+x.foil:''}${isW(x)?' · <b style="color:var(--ac)">richiesta</b>':''}</div></div>`};
+      return `<div style="width:min(100%,260px)">${src?`<img class="card" src="${esc(src)}" alt="">`:''}<div><b class="loc">${esc(x.loc||'?')}</b> · ${x.qty}× · ${ssi(x.set)} ${esc((db.sn||{})[x.set]||x.set)}${x.num?' #'+esc(x.num):''}${x.foil?' ✦'+x.foil:''}${isW(x)?' · <b style="color:var(--ac)">richiesta</b>':''}</div></div>`};
     el.innerHTML=`<h3>${esc(nm)}</h3>`+(want&&want.set&&o.length&&!o.some(isW)?`<p class="no">Edizione richiesta (${esc(want.set)}) non posseduta: ti mostro le altre.</p>`:'')+
       (o.length?`<div style="display:flex;flex-wrap:wrap;gap:14px">${o.map(one).join('')}</div>`
         :(gen?`<img class="card" src="${gen.normal}" alt="">`:'')+`<p class="no"><b>${c?'Non in collezione':'Nome non riconosciuto da Scryfall: prova con il nome inglese'}</b></p>`)+
@@ -182,12 +269,13 @@ $('#load').onclick=async()=>{
   deck.sort((a,b)=>nat(L(a)[0]||'~',L(b)[0]||'~'));
   renderDeck();
 };
+let popIdx=-1;
 function renderDeck(){
   const t=deck.filter(d=>d.taken).length;
   $('#dl').innerHTML=deck.length?`<small>${t}/${deck.length} prese · ordinate per posizione</small>`+deck.map((d,i)=>{
     const h=hit(d),q=h.rows.reduce((s,c)=>s+c.qty,0);
     const ed=d.set?` <small>(${esc(d.set)}${d.num?' '+esc(d.num):''})</small>`:'';
-    return `<div class="item ${i==sel?'sel':''} ${d.taken?'done':''}" data-i="${i}">
+    return `<div class="item ${i==sel?'sel':''} ${d.taken?'done':''} ${i==popIdx&&d.taken?'pop':''}" data-i="${i}">
       <input type="checkbox" ${d.taken?'checked':''}>
       <span class="n">${d.qty}× ${esc(d.name)}${ed}</span>
       ${q?`<span class="loc">${esc(L(d).join(', '))}</span>${h.alt?` <small>(${esc([...new Set(h.rows.map(c=>c.set))].join(', '))})</small>`:''}${q<d.qty?`<small class="no">ne hai ${q}</small>`:''}<span class="st ${d.taken?'ok':h.alt?'alt':'no'}">${d.taken?'presa':h.alt?'altra edizione':'da prendere'}</span>`:`<span class="no">${d.unk?'nome non riconosciuto':'non posseduta'}</span>`}
@@ -196,9 +284,9 @@ function renderDeck(){
 $('#dl').onclick=e=>{
   const it=e.target.closest('.item');if(!it)return;
   const i=+it.dataset.i;
-  if(e.target.type=='checkbox')deck[i].taken=e.target.checked;
+  if(e.target.type=='checkbox'){deck[i].taken=e.target.checked;popIdx=i}
   else{sel=i;show(deck[i].name,$('#dd'),deck[i])}
-  renderDeck();
+  renderDeck();popIdx=-1;
 };
 
 /* 2. Collezione */
@@ -215,7 +303,13 @@ const ik=c=>c.sid||(c.name+'|'+(c.set||''));
 function cat(t){t=(t||'').split(' // ')[0];
   return /Creature/.test(t)?'Creatura':/Planeswalker/.test(t)?'Planeswalker':/Battle/.test(t)?'Battaglia':/Land/.test(t)?'Terra':/Instant/.test(t)?'Istantaneo':/Sorcery/.test(t)?'Stregoneria':/Artifact/.test(t)?'Artefatto':/Enchantment/.test(t)?'Incantesimo':'Altro'}
 const picked=new Set();let shown=[];
-function updSel(){const q=[...picked].reduce((s,c)=>s+c.qty,0);$('#selc').textContent=picked.size?`${picked.size} righe (${q} carte)`:'nessuna selezionata'}
+let colView='g';try{colView=localStorage.getItem('libview')||'g'}catch(e){}
+function updSel(){
+  const q=[...picked].reduce((s,c)=>s+c.qty,0),on=picked.size>0;
+  $('#selc').textContent=on?`${picked.size} selezionate (${q} carte)`:'';
+  $('#selbar').style.display=on?'flex':'none';
+  if(document.body)document.body.style.paddingBottom=on?'150px':'';
+}
 function renderCol(){
   const f=key($('#cf').value),Nn=key($('#cfn').value),L=$('#cfl').value,E=$('#cfe').value,K=$('#cfc').value,G=$('#cg').value;
   const inf=c=>(db.info||{})[ik(c)]||{};
@@ -233,15 +327,20 @@ function renderCol(){
   const cnt={};if(G)rows.forEach(r=>{const g=gk(r.c);cnt[g]=(cnt[g]||0)+r.c.qty});
   const miss=db.cards.filter(c=>!c.name.startsWith('Carta sconosciuta')&&!inf(c).t).length;
   shown=rows.map(r=>r.c);{const all=new Set(db.cards);picked.forEach(c=>{if(!all.has(c))picked.delete(c)})}
+  const V=colView,LIM=V=='g'?600:1000;
   let h='',last=null;
-  rows.slice(0,1000).forEach(({c,i})=>{
-    if(G){const g=gk(c);if(g!==last){last=g;h+=`<tr><th colspan="7" style="text-align:left;padding:12px 4px 4px;color:var(--ac)">${esc(g)} · ${cnt[g]} carte</th></tr>`}}
-    const im=inf(c).i;
-    h+=`<tr><td style="width:30px"><input type="checkbox" class="pk" data-i="${i}" ${picked.has(c)?'checked':''}></td><td data-p="${i}" style="width:44px;cursor:pointer">${im?`<img src="${esc(im)}" loading="lazy" width="38" alt="" style="border-radius:3px;display:block">`:'🂠'}</td>
-      <td data-p="${i}" style="cursor:pointer">${esc(c.name)}</td><td>${esc(c.set)}${c.num?' #'+esc(c.num):''}${c.foil?' ✦'+c.foil:''}</td><td>${c.qty}×</td>
+  rows.slice(0,LIM).forEach(({c,i})=>{
+    if(G){const g=gk(c);if(g!==last){last=g;h+=V=='g'?`<div class="gh">${G=='e'?ssi(c.set):G=='c'?cti(g):''} ${esc(g)} · ${cnt[g]} carte</div>`:`<tr><th colspan="7" style="text-align:left;padding:12px 4px 4px;color:var(--ac)">${G=='e'?ssi(c.set):G=='c'?cti(g):''} ${esc(g)} · ${cnt[g]} carte</th></tr>`}}
+    const im=inf(c).i,ck=picked.has(c)?'checked':'';
+    h+=V=='g'
+      ?`<div class="cc ${ck?'on':''}"><div class="art" data-p="${i}">${im?`<img src="${esc(im)}" loading="lazy" alt="">`:''}${c.qty>1?`<span class="qb">×${c.qty}</span>`:''}<input type="checkbox" class="pk" data-i="${i}" ${ck} aria-label="Seleziona"></div><div class="cl"><span class="plate">${esc(c.loc||'–')}</span><span class="cn" data-p="${i}">${esc(c.name)}</span></div><div class="cm">${ssi(c.set)} ${esc(c.set)}${c.num?' #'+esc(c.num):''}${c.foil?' ✦'+c.foil:''} ${cti(ct(c))}</div></div>`
+      :`<tr><td style="width:30px"><input type="checkbox" class="pk" data-i="${i}" ${ck}></td><td data-p="${i}" style="width:44px;cursor:pointer">${im?`<img src="${esc(im)}" loading="lazy" width="38" alt="" style="border-radius:3px;display:block">`:'🂠'}</td>
+      <td data-p="${i}" style="cursor:pointer">${esc(c.name)}</td><td>${ssi(c.set)} ${esc(c.set)}${c.num?' #'+esc(c.num):''}${c.foil?' ✦'+c.foil:''}</td><td>${c.qty}×</td>
       <td><input class="le" size="6" value="${esc(c.loc)}" data-i="${i}"></td><td><button data-d="${i}">✕</button></td></tr>`;
   });
-  $('#ct').innerHTML=`<small>${rows.length} righe · ${rows.reduce((s,r)=>s+r.c.qty,0)} carte${rows.length>1000?' (mostro le prime 1000)':''}${miss?` · ${miss} senza categoria/anteprima: tocca "Aggiorna info"`:''}</small><table>${h}</table>`;updSel();
+  $('#vg').className=V=='g'?'on':'';$('#vl').className=V=='g'?'':'on';
+  $('#ct').innerHTML=`<small>${rows.length} righe · ${rows.reduce((s,r)=>s+r.c.qty,0)} carte${rows.length>LIM?` (mostro le prime ${LIM})`:''}${miss?` · ${miss} senza categoria/anteprima: tocca "Aggiorna info"`:''}</small>`+(V=='g'?`<div class="gridc">${h}</div>`:`<div class="tw"><table>${h}</table></div>`);
+  updSel();
 }
 async function enrich(){
   db.info=db.info||{};db.sn=db.sn||{};
@@ -269,15 +368,22 @@ async function preview(i){
   box.style.display='flex';box.innerHTML='<small>Carico…</small>';
   let src=inf&&inf.i?inf.i.replace('/small/','/normal/'):null;
   if(!src){const x=await fetchCard(c.name),im=x&&(x.image_uris||(x.card_faces&&x.card_faces[0].image_uris));src=im&&im.normal}
-  box.innerHTML=(src?`<img src="${esc(src)}" alt="" style="max-height:82vh;max-width:92vw;border-radius:14px">`:'<p>Anteprima non disponibile</p>')+
-    `<div style="margin-top:10px;font-size:18px;font-weight:700">${esc(c.name)} · ${c.qty}× · ${esc(c.loc?'Posizione '+c.loc:'senza posizione')}</div>`;
+  box.innerHTML=(src?`<div class="tilt" id="tl"><img src="${esc(src)}" alt="">${c.foil?'<span class="foilfx"></span>':''}<span class="glare"></span></div>`:'<p>Anteprima non disponibile</p>')+
+    `<div style="margin-top:14px;font-size:18px;font-weight:700">${esc(c.name)} · ${c.qty}× · ${esc(c.loc?'Posizione '+c.loc:'senza posizione')}</div><div style="margin-top:4px;font-size:14px;opacity:.85">${ssi(c.set)} ${esc((db.sn||{})[c.set]||c.set)}${c.num?' #'+esc(c.num):''}${c.foil?' · foil':''}</div>`;
 }
+$('#pv').onpointermove=e=>{
+  const t=$('#tl');if(!t||!t.getBoundingClientRect)return;
+  const r=t.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+  t.style.transform=`rotateY(${(x-.5)*26}deg) rotateX(${(.5-y)*26}deg)`;
+  t.style.setProperty('--gx',x*100+'%');t.style.setProperty('--gy',y*100+'%');t.style.setProperty('--fx',x*100+'%');
+};
+$('#pv').onpointerleave=$('#pv').onpointerup=()=>{const t=$('#tl');if(t)t.style.transform=''};
 ['#cf','#cfn'].forEach(x=>$(x).oninput=renderCol);
 ['#cfl','#cfe','#cfc','#cg'].forEach(x=>$(x).onchange=renderCol);
 $('#enr').onclick=async()=>{try{await enrich();renderCol()}catch(x){alert(x.message)}};
 $('#ct').onchange=e=>{
   if(e.target.className=='le'){db.cards[+e.target.dataset.i].loc=e.target.value.trim();save()}
-  else if(e.target.className=='pk'){const c=db.cards[+e.target.dataset.i];e.target.checked?picked.add(c):picked.delete(c);updSel()}
+  else if(e.target.className=='pk'){const c=db.cards[+e.target.dataset.i];e.target.checked?picked.add(c):picked.delete(c);const cc=e.target.closest&&e.target.closest('.cc');if(cc)cc.classList.toggle('on',e.target.checked);updSel()}
 };
 $('#selall').onclick=()=>{shown.forEach(c=>picked.add(c));renderCol()};
 $('#selnone').onclick=()=>{picked.clear();renderCol()};
@@ -291,9 +397,9 @@ $('#ba').onclick=()=>{
   const n=picked.size;picked.clear();save();renderCol();
   $('#prog').textContent=`Posizione "${l||'(vuota)'}" assegnata a ${n} righe.`;
 };
-$('#ct').onclick=e=>{const p=e.target.closest('[data-p]');if(p){preview(+p.dataset.p);return}const d=e.target.dataset.d;if(d!=null&&confirm('Eliminare questa riga?')){picked.delete(db.cards[+d]);db.cards.splice(+d,1);save();renderCol()}};
+$('#ct').onclick=e=>{if(e.target.type=='checkbox')return;const p=e.target.closest('[data-p]');if(p){preview(+p.dataset.p);return}const d=e.target.dataset.d;if(d!=null&&confirm('Eliminare questa riga?')){picked.delete(db.cards[+d]);db.cards.splice(+d,1);save();renderCol()}};
 $('#clr').onclick=()=>{
-  if(!confirm('Cancellare TUTTA la collezione, le posizioni e i dati scaricati?\nSe ti serve un backup, premi prima Esporta.'))return;
+  if(!confirm('Cancellare TUTTA la collezione, le posizioni e i dati scaricati?\nSe ti serve un backup, premi prima Esporta.\nCon il cloud collegato vengono cancellate anche sugli altri dispositivi.'))return;
   if(!confirm('Sei sicuro? Non si può annullare.'))return;
   db={cards:[]};picked.clear();save();$('#prog').textContent='';renderCol();
 };
@@ -359,7 +465,7 @@ function ricerca(){
   let m=[];
   if(f.length>=2||S||N)m=db.cards.filter(c=>key(c.name).includes(f)&&(!S||(c.set||'').toUpperCase()==S)&&(!N||String(c.num||'').toLowerCase()==N));
   m.sort((a,b)=>key(a.name).localeCompare(key(b.name))||String(a.set||'').localeCompare(String(b.set||''))||nat(a.num||'',b.num||''));
-  let h=m.slice(0,40).map(c=>`<div class="item" data-i="${db.cards.indexOf(c)}">${inf(c).i?`<img src="${esc(inf(c).i)}" loading="lazy" width="34" alt="" style="border-radius:3px">`:''}<span class="n">${esc(c.name)}<br><small>${esc(c.set)}${c.num?' #'+esc(c.num):''}${c.foil?' ✦':''} · ${c.qty}×</small></span><span class="loc">${esc(c.loc||'?')}</span></div>`).join('');
+  let h=m.slice(0,40).map(c=>`<div class="item" data-i="${db.cards.indexOf(c)}">${inf(c).i?`<img src="${esc(inf(c).i)}" loading="lazy" width="34" alt="" style="border-radius:3px">`:''}<span class="n">${esc(c.name)}<br><small>${ssi(c.set)} ${esc(c.set)}${c.num?' #'+esc(c.num):''}${c.foil?' ✦':''} · ${c.qty}×</small></span><span class="loc">${esc(c.loc||'?')}</span></div>`).join('');
   if(m.length>40)h+=`<small>…altre ${m.length-40} stampe: restringi la ricerca</small>`;
   if(!m.length&&(f.length>1||S||N))h='<p class="no">Nessuna corrispondenza in collezione</p>';
   $('#sl').innerHTML=h;
@@ -376,88 +482,128 @@ $('#sl').onclick=e=>{
   show(c.name,$('#sd'),{set:(c.set||'').toUpperCase(),num:c.num||''});
 };
 
-/* 4. Cloud: Google Drive (cartella nascosta dell'app, permesso drive.appdata) */
-let gtok=null,gexp=0,at;
+/* 4. Cloud: Firebase (Realtime Database + accesso con email e password). Una riga per carta, vince la modifica più recente. */
 const meta=()=>{try{return JSON.parse(localStorage.getItem('libmeta'))||{}}catch(e){return{}}};
 const setMeta=o=>{try{localStorage.setItem('libmeta',JSON.stringify({...meta(),...o}))}catch(e){}};
 const gmsg=t=>{$('#gst').textContent=t};
-$('#gid').value=meta().cid||'';$('#gauto').checked=!!meta().auto;
-$('#gauto').onchange=e=>setMeta({auto:e.target.checked});
-function loadGis(){return new Promise((ok,ko)=>{
-  if(window.google&&google.accounts){ok();return}
-  const sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';
-  sc.onload=ok;sc.onerror=()=>ko(new Error('Impossibile caricare Google: controlla la connessione.'));document.head.appendChild(sc)})}
-async function gauth(){
-  if(gtok&&Date.now()<gexp)return gtok;
-  if(location.protocol=='file:')throw new Error('Google non accetta i file locali: apri l\'app da un indirizzo https.');
-  const cid=$('#gid').value.replace(/[^\x21-\x7E]/g,'');
-  if(!cid)throw new Error('Inserisci prima il Client ID di Google.');
-  if(!/^\d+-[a-z0-9]+\.apps\.googleusercontent\.com$/i.test(cid))throw new Error('Il Client ID non ha il formato giusto: deve essere come 123456789012-abc...xyz.apps.googleusercontent.com (letti '+cid.length+' caratteri).');
-  $('#gid').value=cid;setMeta({cid});
-  gmsg('Accesso con il Client ID che inizia con '+cid.slice(0,8)+' e finisce con '+cid.slice(-26)+' ('+cid.length+' caratteri)…');
-  if(!(window.google&&google.accounts))await loadGis();
-  return new Promise((ok,ko)=>google.accounts.oauth2.initTokenClient({
-    client_id:cid,scope:'https://www.googleapis.com/auth/drive.appdata',
-    callback:r=>{if(r.error)return ko(new Error('Accesso non riuscito: '+r.error));gtok=r.access_token;gexp=Date.now()+(r.expires_in-60)*1000;ok(gtok)},
-    error_callback:e=>ko(new Error('Accesso annullato o bloccato ('+((e&&e.type)||'errore')+'). Se non si apre la finestra, riprova.'))
-  }).requestAccessToken());
+const fb={on:false,uid:null,ref:null,off:0,conn:true};
+let sent={},pt,rt,fbReady=false;
+const fbNow=()=>Date.now()+(fb.off||0);
+const cardKey=c=>c.sid||c.id||(c.id='m'+Math.random().toString(36).slice(2,9)+Date.now().toString(36));
+const toRec=c=>({n:c.name,s:c.set||'',u:String(c.num||''),q:c.qty||1,f:c.foil||0,l:c.loc||'',i:c.sid||'',t:((db.info||{})[ik(c)]||{}).t||'',z:(db.sn||{})[c.set]||''});
+const recStr=r=>JSON.stringify([r.n,r.s,r.u,r.q,r.f,r.l,r.i,r.t,r.z]);
+function fromRec(n,k,r){
+  n.name=r.n;n.set=r.s||'';n.num=r.u||'';n.qty=r.q||1;n.foil=r.f||0;n.loc=r.l||'';
+  if(r.i)n.sid=r.i;else n.id=k;
+  n.upd=r.up||0;
+  if(r.i&&r.t){db.info=db.info||{};db.info[r.i]={t:r.t,i:`https://cards.scryfall.io/small/front/${r.i[0]}/${r.i[1]}/${r.i}.jpg`}}
+  if(r.s&&r.z){db.sn=db.sn||{};db.sn[r.s]=r.z}
 }
-async function gfetch(url,opt={}){
-  const tk=await gauth();
-  const r=await fetch(url,{...opt,headers:{Authorization:'Bearer '+tk,...(opt.headers||{})}});
-  if(r.status==401){gtok=null;throw new Error('Sessione Google scaduta: premi di nuovo "Accedi e sincronizza".')}
-  if(!r.ok)throw new Error('Errore di Google Drive ('+r.status+').');
-  return r;
+function stat(extra){gmsg((fb.on?(fb.conn?'Collegato al cloud':'Offline: le modifiche partiranno al ritorno della connessione'):'Non collegato')+(extra?' · '+extra:''))}
+function later(){clearTimeout(rt);rt=setTimeout(()=>{renderHome();renderCol();if(deck.length)renderDeck()},250)}
+function applyRemote(k,r,idx){
+  if(!r)return;
+  const rs=r.d?'D':recStr(r);
+  if(sent[k]===rs)return;
+  const c=idx?idx.get(k):db.cards.find(x=>cardKey(x)==k);
+  if(c&&(c.upd||0)>(r.up||0))return;
+  if(r.d){if(c){picked.delete(c);db.cards.splice(db.cards.indexOf(c),1);if(idx)idx.delete(k)}}
+  else{const n=c||{loc:''};fromRec(n,k,r);if(!c){db.cards.push(n);if(idx)idx.set(k,n)}}
+  sent[k]=rs;persist();if(!idx)later();
 }
-async function gfind(){
-  const r=await gfetch('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&fields=files(id,modifiedTime)&q='+encodeURIComponent("name='libreria.json'"));
-  return((await r.json()).files||[])[0]||null;
+function autoUp(){if(fb.on){clearTimeout(pt);pt=setTimeout(()=>push(),1500)}}
+async function push(first){
+  if(!fb.on)return;
+  const up={},now=fbNow(),seen=new Set();
+  db.cards.forEach(c=>{const k=cardKey(c);seen.add(k);const r=toRec(c),s=recStr(r);
+    if(sent[k]!==s){c.upd=now;up[k]={...r,up:now};sent[k]=s}});
+  Object.keys(sent).forEach(k=>{if(!seen.has(k)&&sent[k]!=='D'){up[k]={d:1,up:now};sent[k]='D'}});
+  const ks=Object.keys(up);if(!ks.length)return;
+  persist();
+  try{
+    for(let i=0;i<ks.length;i+=3000){const part={};ks.slice(i,i+3000).forEach(k=>part[k]=up[k]);await fb.ref.update(part)}
+    stat(`${db.cards.length} righe, inviate ${ks.length} modifiche`);
+  }catch(e){ks.forEach(k=>delete sent[k]);gmsg(fbErr(e));clearTimeout(pt);pt=setTimeout(()=>push(),10000)}
 }
-async function gwrite(f){
-  const b='lib'+Date.now(),m=JSON.stringify(f?{}:{name:'libreria.json',parents:['appDataFolder']});
-  const body=`--${b}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${m}\r\n--${b}\r\nContent-Type: application/json\r\n\r\n${JSON.stringify(db)}\r\n--${b}--`;
-  const r=await gfetch('https://www.googleapis.com/upload/drive/v3/files'+(f?'/'+f.id:'')+'?uploadType=multipart&fields=id,modifiedTime',
-    {method:f?'PATCH':'POST',headers:{'Content-Type':'multipart/related; boundary='+b},body});
-  return r.json();
+async function fbStart(user){
+  if(fb.on&&fb.uid==user.uid)return;
+  fb.uid=user.uid;fb.ref=firebase.database().ref('users/'+user.uid+'/cards');
+  gmsg('Collego il cloud…');
+  const remote=(await fb.ref.once('value')).val()||{};
+  sent={};
+  const conf=db.cards.filter(c=>{if(c.upd)return false;const r=remote[cardKey(c)];return r&&!r.d&&recStr(r)!==recStr(toRec(c))});
+  if(conf.length&&confirm(`${conf.length} carte di questo dispositivo sono diverse da quelle nel cloud.\n\nOK = tengo le MIE (aggiorno il cloud)\nAnnulla = tengo quelle del CLOUD`)){const n=fbNow();conf.forEach(c=>{c.upd=n})}
+  const idx=new Map();db.cards.forEach(c=>idx.set(cardKey(c),c));
+  Object.keys(remote).forEach(k=>applyRemote(k,remote[k],idx));
+  fb.on=true;
+  fb.ref.on('child_added',x=>applyRemote(x.key,x.val()));
+  fb.ref.on('child_changed',x=>applyRemote(x.key,x.val()));
+  await push(true);
+  later();stat(db.cards.length+' righe');
 }
-async function gup(f){
-  if(f&&!db.cards.length&&!confirm('La collezione su questo dispositivo è vuota: sovrascrivo Drive con una collezione vuota?'))return;
-  if(!db.updatedAt){db.updatedAt=Date.now();persist()}
-  const w=await gwrite(f);
-  setMeta({mt:w.modifiedTime,lt:db.updatedAt});
-  gmsg(`Salvato su Drive alle ${new Date().toLocaleTimeString()}.`);
+const fbErr=e=>{const c=String((e&&e.code)||'')+' '+String((e&&e.message)||'');
+  return /invalid-credential|wrong-password|user-not-found|invalid-email/.test(c)?'Email o password non corrette.':/network/i.test(c)?'Nessuna connessione.':/PERMISSION_DENIED|permission/i.test(c)?'Permesso negato: controlla le regole del database e che l\'utente sia quello giusto.':(e&&e.message)||'Errore sconosciuto.'};
+function loadJs(u){return new Promise((ok,ko)=>{const sc=document.createElement('script');sc.src=u;sc.onload=ok;sc.onerror=()=>ko(new Error('Impossibile caricare Firebase: controlla la connessione.'));document.head.appendChild(sc)})}
+async function fbLoad(){if(window.firebase&&firebase.database)return;for(const m of['app','auth','database'])await loadJs(`https://www.gstatic.com/firebasejs/10.14.1/firebase-${m}-compat.js`)}
+async function fbInit(cfg){
+  await fbLoad();
+  if(!firebase.apps.length)firebase.initializeApp(cfg);
+  if(fbReady)return;fbReady=true;
+  firebase.database().ref('.info/serverTimeOffset').on('value',x=>{fb.off=x.val()||0});
+  firebase.database().ref('.info/connected').on('value',x=>{fb.conn=!!x.val();if(fb.on)stat()});
+  firebase.auth().onAuthStateChanged(u=>{
+    if(u)fbStart(u).catch(e=>gmsg(fbErr(e)));
+    else{fb.on=false;fb.uid=null;if(fb.ref)fb.ref.off();stat()}
+  });
 }
-async function gdown(f){
-  const r=await gfetch('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media'),d=await r.json();
-  if(!d||!d.cards)throw new Error('Il file su Drive non è valido.');
-  db=d;if(!db.updatedAt)db.updatedAt=Date.now();picked.clear();persist();renderCol();
-  setMeta({mt:f.modifiedTime,lt:db.updatedAt});
-  gmsg(`Scaricate ${db.cards.length} righe da Drive.`);
-}
-async function gsync(){
-  gmsg('Controllo Drive…');
-  const f=await gfind(),m=meta();
-  if(!f)return gup(null);
-  const rN=f.modifiedTime!==m.mt,lN=(db.updatedAt||0)!==(m.lt||0);
-  if(rN&&lN)return confirm('Sia questo dispositivo sia Drive hanno modifiche non sincronizzate.\n\nOK = tengo i dati di QUESTO dispositivo (sovrascrivo Drive)\nAnnulla = tengo i dati di Drive (sostituisco quelli qui)')?gup(f):gdown(f);
-  if(rN)return gdown(f);
-  if(lN)return gup(f);
-  gmsg('Già sincronizzato.');
-}
-function autoUp(){
-  if(!meta().auto||!gtok||Date.now()>=gexp)return;
-  clearTimeout(at);
-  at=setTimeout(async()=>{try{
-    const f=await gfind();
-    if(f&&f.modifiedTime!==meta().mt){gmsg('Drive è cambiato da un altro dispositivo: premi "Accedi e sincronizza".');return}
-    await gup(f);
-  }catch(e){gmsg(e.message)}},3000);
-}
-const gdo=fn=>async()=>{try{await fn()}catch(e){gmsg(e.message)}};
-$('#gsync').onclick=gdo(gsync);
-$('#gup').onclick=gdo(async()=>{if(confirm('Carico i dati di questo dispositivo su Drive e sostituisco quelli presenti. Procedo?'))await gup(await gfind())});
-$('#gdown').onclick=gdo(async()=>{const f=await gfind();if(!f)throw new Error('Su Drive non c\'è ancora nessun salvataggio.');if(confirm('Sostituisco i dati di questo dispositivo con quelli di Drive. Procedo?'))await gdown(f)});
+function parseCfg(t){const o={};for(const m of t.matchAll(/([A-Za-z]\w*)\s*:\s*["']([^"']+)["']/g))o[m[1]]=m[2];return o}
+$('#fbcfg').value=meta().fbt||'';$('#fbem').value=meta().fbe||'';
+$('#fbin').onclick=async()=>{try{
+  const t=$('#fbcfg').value.trim(),cfg=parseCfg(t);
+  if(!cfg.apiKey||!cfg.projectId)throw new Error('Configurazione incompleta: incolla il blocco firebaseConfig, con apiKey e projectId.');
+  if(!cfg.databaseURL)throw new Error('Manca databaseURL: copialo dalla pagina Realtime Database di Firebase e aggiungilo alla configurazione.');
+  const em=$('#fbem').value.trim(),pw=$('#fbpw').value;
+  if(!em||!pw)throw new Error('Inserisci email e password.');
+  setMeta({fbt:t,fbe:em});gmsg('Accesso in corso…');
+  await fbInit(cfg);
+  await firebase.auth().signInWithEmailAndPassword(em,pw);
+}catch(e){gmsg(fbErr(e))}};
+$('#fbout').onclick=async()=>{try{if(window.firebase&&firebase.apps.length)await firebase.auth().signOut()}catch(e){}fb.on=false;stat()};
+if(meta().fbt)fbInit(parseCfg(meta().fbt)).catch(e=>gmsg(fbErr(e)));
 
-renderCol();
+/* Home: numeri e scatole */
+function renderHome(){
+  const cs=db.cards,n=cs.reduce((a,c)=>a+c.qty,0),sets=new Set(cs.map(c=>c.set).filter(Boolean)),box={};
+  let free=0;
+  cs.forEach(c=>{const l=c.loc||'';if(!l)free+=c.qty;const b=box[l]=box[l]||{q:0};b.q+=c.qty});
+  const named=Object.keys(box).filter(k=>k).sort(nat),mx=Math.max(1,...Object.values(box).map(b=>b.q)),f=v=>v.toLocaleString('it-IT');
+  $('#hn').textContent=f(n);
+  $('#hs').innerHTML=[['Stampe diverse',cs.length],['Espansioni',sets.size],['Scatole',named.length],['Senza posizione',free]].map(([l,v])=>`<div class="stat"><b>${f(v)}</b><span>${l}</span></div>`).join('');
+  const tile=k=>`<button class="box" data-loc="${esc(k)}"><span class="plate">${esc(k||'–')}</span><span class="bq">${f(box[k].q)} carte${k?'':' senza scatola'}</span><span class="fill"><i style="width:${Math.round(box[k].q/mx*100)}%"></i></span></button>`;
+  $('#hshelf').innerHTML=cs.length?named.map(tile).join('')+(box['']?tile(''):''):'<small>Importa o aggiungi delle carte per vedere le scatole.</small>';
+}
+$('#hshelf').onclick=e=>{
+  const b=e.target.closest('.box');if(!b)return;
+  ['#cf','#cfn'].forEach(x=>{$(x).value=''});
+  go('col');
+  $('#cfe').value='';$('#cfc').value='';$('#cg').value='';
+  $('#cfl').value='L:'+b.dataset.loc;renderCol();
+};
+/* Aspetto: tema chiaro/scuro e vista a griglia */
+function applyTheme(m){
+  try{localStorage.setItem('libtheme',m)}catch(e){}
+  const r=document.documentElement;if(r){m=='auto'?r.removeAttribute('data-theme'):r.setAttribute('data-theme',m)}
+  $('#thm').textContent={auto:'Auto',light:'Chiaro',dark:'Scuro'}[m];
+}
+let thm='auto';try{thm=localStorage.getItem('libtheme')||'auto'}catch(e){}
+applyTheme(thm);
+$('#thm').onclick=()=>{thm={auto:'light',light:'dark',dark:'auto'}[thm];applyTheme(thm)};
+['g','l'].forEach(v=>$('#v'+v).onclick=()=>{colView=v;try{localStorage.setItem('libview',v)}catch(e){}renderCol()});
+function setTop(){const t=$('#top');if(t&&t.offsetHeight&&document.documentElement)document.documentElement.style.setProperty('--topH',t.offsetHeight+'px')}
+setTimeout(()=>{const sp=$('#splash');if(sp&&sp.remove)sp.remove()},1600);
+setTop();if(typeof addEventListener=='function')addEventListener('resize',setTop);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(setTop);
+
+renderHome();renderCol();
 if(typeof navigator!=='undefined'&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script></body></html>
