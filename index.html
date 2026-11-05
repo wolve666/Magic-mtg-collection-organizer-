@@ -122,7 +122,7 @@ setTimeout(function(){var s=document.getElementById('splash');if(s)s.remove()},1
 <div id="errb" onclick="this.style.display='none'" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:30;background:#b3382f;color:#fff;padding:10px 14px;font-size:13px"></div>
 <div id="splash"><img src="icon-192.png" alt=""><div class="sn">Libreria Carte</div></div>
 <div id="top">
-<header><div><span class="ttl">Libreria Carte</span><span class="ver">v1.10</span></div><button id="thm" aria-label="Cambia tema">Auto</button></header>
+<header><div><span class="ttl">Libreria Carte</span><span class="ver">v1.11</span></div><button id="thm" aria-label="Cambia tema">Auto</button></header>
 <nav>
 <button class="on" data-t="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></button>
 <button data-t="pre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M3.5 6l1.5 1.5L7 5M3.5 12l1.5 1.5L7 11M3.5 18l1.5 1.5L7 17"/></svg><span>Prelievo</span></button>
@@ -516,7 +516,7 @@ function applyRemote(k,r,idx){
   if(c&&(c.upd||0)>(r.up||0))return;
   if(r.d){if(c){picked.delete(c);db.cards.splice(db.cards.indexOf(c),1);if(idx)idx.delete(k)}}
   else{const n=c||{loc:''};fromRec(n,k,r);if(!c){db.cards.push(n);if(idx)idx.set(k,n)}}
-  sent[k]=rs;persist();if(!idx)later();
+  sent[k]=rs;if(!idx){persist();later()}
 }
 function autoUp(){if(fb.on){clearTimeout(pt);pt=setTimeout(()=>push(),1500)}}
 async function push(first){
@@ -542,6 +542,7 @@ async function fbStart(user){
   if(conf.length&&confirm(`${conf.length} carte di questo dispositivo sono diverse da quelle nel cloud.\n\nOK = tengo le MIE (aggiorno il cloud)\nAnnulla = tengo quelle del CLOUD`)){const n=fbNow();conf.forEach(c=>{c.upd=n})}
   const idx=new Map();db.cards.forEach(c=>idx.set(cardKey(c),c));
   Object.keys(remote).forEach(k=>applyRemote(k,remote[k],idx));
+  persist();
   fb.on=true;
   fb.ref.on('child_added',x=>applyRemote(x.key,x.val()));
   fb.ref.on('child_changed',x=>applyRemote(x.key,x.val()));
