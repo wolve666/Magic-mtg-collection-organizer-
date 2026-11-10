@@ -49,7 +49,7 @@ function go(t,fromPop){
   if(document.body&&document.body.dataset)document.body.dataset.tab=t;
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));
   document.querySelectorAll('section').forEach(e=>e.classList.toggle('on',e.id==t));
-  if(swipeDir){const s=$('#'+t),c='sw-'+swipeDir;if(s){s.classList.remove('sw-r');s.classList.remove('sw-l');void s.offsetWidth;s.classList.add(c);setTimeout(()=>s.classList.remove(c),400)}swipeDir=null}
+  {const s=$('#'+t);if(s){['in','sw-r','sw-l'].forEach(c=>s.classList.remove(c));void s.offsetWidth;s.classList.add(swipeDir?'sw-'+swipeDir:'in')}swipeDir=null}
   dbReady.then(()=>{
     if(t=='col'){colAnim=true;renderCol()}
     if(t=='home')renderHome();

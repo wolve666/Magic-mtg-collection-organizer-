@@ -181,3 +181,12 @@ section.on.sw-r{animation:swr .3s cubic-bezier(.2,.8,.2,1)}
 section.on.sw-l{animation:swl .3s cubic-bezier(.2,.8,.2,1)}
 @keyframes swr{from{opacity:0;transform:translateX(44px)}to{opacity:1;transform:none}}
 @keyframes swl{from{opacity:0;transform:translateX(-44px)}to{opacity:1;transform:none}}
+
+/* v2.5.1: una sola animazione per cambio scheda (prima ripartiva una seconda volta) */
+section.on{animation:none}
+section.on.in{animation:fadein .22s ease-out}
+section.on.sw-r{animation:swr .26s cubic-bezier(.2,.8,.2,1)}
+section.on.sw-l{animation:swl .26s cubic-bezier(.2,.8,.2,1)}
+@keyframes fadein{from{opacity:.25;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes swr{from{opacity:.25;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes swl{from{opacity:.25;transform:translateX(-28px)}to{opacity:1;transform:none}}
