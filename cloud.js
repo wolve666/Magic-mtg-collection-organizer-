@@ -51,6 +51,7 @@ function fbStart(user){
   return fb.p;
 }
 async function fbStart0(user){
+  await dbReady;
   fb.uid=user.uid;fb.ref=firebase.database().ref('users/'+user.uid+'/cards');
   gmsg('Collego il cloud…');
   const remote=(await withTimeout(fb.ref.once('value'),25000,'Il cloud non risponde: controlla la connessione e le regole del database.')).val()||{};
@@ -65,6 +66,7 @@ async function fbStart0(user){
   fb.ref.on('child_changed',x=>applyRemote(x.key,x.val()));
   await push(true);
   later();stat(db.cards.length+' righe');
+  autoBackup();renderBk();
 }
 const withTimeout=(p,ms,msg)=>Promise.race([p,new Promise((_,no)=>setTimeout(()=>no(new Error(msg)),ms))]);
 const fbErr=e=>{const c=String((e&&e.code)||'')+' '+String((e&&e.message)||'');
@@ -97,3 +99,39 @@ $('#fbin').onclick=async()=>{try{
 }catch(e){gmsg(fbErr(e))}};
 $('#fbout').onclick=async()=>{try{if(window.firebase&&firebase.apps.length)await firebase.auth().signOut()}catch(e){}fb.on=false;stat()};
 if(meta().fbe&&!/[?&]safe=1/.test(location.search))fbInit(meta().fbt?parseCfg(meta().fbt):FBCFG).catch(e=>gmsg(fbErr(e)));
+
+/* Backup automatici nel cloud: una copia al giorno, si tengono gli ultimi 7 */
+const bkRef=p=>firebase.database().ref('users/'+fb.uid+'/'+p);
+const itDate=d=>d.split('-').reverse().join('/');
+async function autoBackup(force){
+  if(!fb.on)return;
+  const day=new Date().toISOString().slice(0,10);
+  if(!force&&meta().bkDay===day)return;
+  try{
+    await withTimeout(bkRef('bk/'+day).set(JSON.stringify(db)),30000,'Backup non riuscito: connessione lenta.');
+    await bkRef('bkidx/'+day).set({at:Date.now(),n:db.cards.length});
+    setMeta({bkDay:day});
+    const idx=(await bkRef('bkidx').once('value')).val()||{};
+    for(const d of Object.keys(idx).sort().slice(0,-7)){await bkRef('bk/'+d).remove();await bkRef('bkidx/'+d).remove()}
+    if(force)gmsg('Backup del '+itDate(day)+' salvato nel cloud.');
+    renderBk();
+  }catch(e){if(force)gmsg(fbErr(e));else console.warn('backup',e)}
+}
+async function renderBk(){
+  const el=$('#bklist');if(!el)return;
+  if(!fb.on){el.innerHTML='<small>Collegati al cloud per vedere i backup.</small>';return}
+  try{
+    const idx=(await bkRef('bkidx').once('value')).val()||{},ds=Object.keys(idx).sort().reverse();
+    el.innerHTML=ds.length?ds.map(d=>`<div class="item"><span class="n">${itDate(d)} · ${(idx[d].n||0).toLocaleString('it-IT')} righe</span><button data-day="${esc(d)}">Ripristina</button></div>`).join(''):'<small>Ancora nessun backup.</small>';
+  }catch(e){el.innerHTML='<small>'+esc(fbErr(e))+'</small>'}
+}
+$('#bknow').onclick=()=>autoBackup(true);
+$('#bklist').onclick=async e=>{
+  const d=e.target.dataset&&e.target.dataset.day;if(!d)return;
+  if(!confirm(`Riporto la collezione com'era il ${itDate(d)}? Le modifiche fatte dopo vanno perse, anche sugli altri dispositivi.`))return;
+  try{
+    const v=(await withTimeout(bkRef('bk/'+d).once('value'),30000,'Il cloud non risponde.')).val();
+    const x=typeof v=='string'?JSON.parse(v):v;if(!x||!x.cards)throw new Error('Backup non valido.');
+    db=x;picked.clear();save();later();gmsg('Collezione riportata al '+itDate(d)+'.');
+  }catch(e){gmsg(fbErr(e))}
+};

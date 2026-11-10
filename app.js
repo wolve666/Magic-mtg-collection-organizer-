@@ -4,9 +4,32 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&g
 const key=n=>String(n).trim().toLowerCase();
 const nat=(a,b)=>String(a).localeCompare(String(b),undefined,{numeric:true});
 let db={cards:[]},deck=[],sel=-1,cache={};
-try{db=JSON.parse(localStorage.getItem('lib'))||db}catch(e){}
 function warn(m){const b=$('#errb');if(b){b.textContent=m+' - tocca per chiudere';b.style.display='block'}}
-const persist=()=>{try{localStorage.setItem('lib',JSON.stringify(db))}catch(e){warn('Memoria del browser piena: le ultime modifiche NON sono salvate su questo dispositivo. Serve passare a un salvataggio più capiente')}};
+/* Archivio locale: IndexedDB (spazioso, salva in background), con passaggio automatico dai dati in localStorage */
+const IDB={db:null};
+function idbOpen(){return new Promise((ok,ko)=>{if(typeof indexedDB=='undefined')return ko(new Error('IndexedDB assente'));const r=indexedDB.open('libreria',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>ok(r.result);r.onerror=()=>ko(r.error)})}
+function idbGet(k){return new Promise((ok,ko)=>{const q=IDB.db.transaction('kv').objectStore('kv').get(k);q.onsuccess=()=>ok(q.result);q.onerror=()=>ko(q.error)})}
+function idbPut(k,v){return new Promise((ok,ko)=>{const tx=IDB.db.transaction('kv','readwrite');tx.objectStore('kv').put(v,k);tx.oncomplete=()=>ok();tx.onerror=()=>ko(tx.error);tx.onabort=()=>ko(tx.error)})}
+const dbReady=(async()=>{
+  try{
+    IDB.db=await idbOpen();
+    let v=await idbGet('lib');
+    if(!v){const old=localStorage.getItem('lib');if(old){await idbPut('lib',old);v=old}}  /* una volta sola: la vecchia copia resta come riserva */
+    if(v){const d=typeof v=='string'?JSON.parse(v):v;if(d&&d.cards)db=d}
+  }catch(e){IDB.db=null;try{db=JSON.parse(localStorage.getItem('lib'))||db}catch(_){}}
+  try{if(typeof navigator!='undefined'&&navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+})();
+let pst=null;
+function persistNow(){
+  pst=null;const s=JSON.stringify(db);
+  if(IDB.db)idbPut('lib',s).catch(()=>warn('Non riesco a salvare sul dispositivo: le ultime modifiche restano solo nel cloud, se collegato'));
+  else{try{localStorage.setItem('lib',s)}catch(e){warn('Memoria del browser piena: le ultime modifiche NON sono salvate su questo dispositivo')}}
+}
+const persist=()=>{clearTimeout(pst);pst=setTimeout(persistNow,400)};
+if(typeof addEventListener=='function'){
+  addEventListener('pagehide',()=>{if(pst){clearTimeout(pst);persistNow()}});
+  addEventListener('visibilitychange',()=>{if(document.visibilityState=='hidden'&&pst){clearTimeout(pst);persistNow()}});
+}
 const save=()=>{db.updatedAt=Date.now();persist();autoUp()};
 const ssi=s=>s?`<i class="ss ss-${esc(String(s).toLowerCase())} ss-fw"></i>`:'';
 const CI={Creatura:'creature',Planeswalker:'planeswalker',Terra:'land',Istantaneo:'instant',Stregoneria:'sorcery',Artefatto:'artifact',Incantesimo:'enchantment'};
@@ -25,9 +48,12 @@ function go(t,fromPop){
   curTab=t;
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));
   document.querySelectorAll('section').forEach(e=>e.classList.toggle('on',e.id==t));
-  if(t=='col')renderCol();
-  if(t=='home')renderHome();
-  if(t=='lab')renderLab(true);
+  dbReady.then(()=>{
+    if(t=='col')renderCol();
+    if(t=='home')renderHome();
+    if(t=='lab')renderLab(true);
+    if(t=='cld'&&typeof renderBk=='function')renderBk();
+  });
   if(window.scrollTo)window.scrollTo(0,0);
 }
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.t));

@@ -22,5 +22,5 @@ setTop();if(typeof addEventListener=='function')addEventListener('resize',setTop
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(setTop);
 
 if(H)H.replaceState({t:'home'},'');
-renderHome();renderCol();
+dbReady.then(()=>{renderHome();renderCol()});
 if(typeof navigator!=='undefined'&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});

@@ -28,7 +28,7 @@ setTimeout(function(){var s=document.getElementById('splash');if(s)s.remove()},1
 <div id="errb" onclick="this.style.display='none'" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:30;background:#b3382f;color:#fff;padding:10px 14px;font-size:13px"></div>
 <div id="splash"><img src="icon-192.png" alt=""><div class="sn">Libreria Carte</div></div>
 <div id="top">
-<header><div><span class="ttl">Libreria Carte</span><span class="ver">v2.1</span></div><div><button id="inst">Installa</button><button id="thm" aria-label="Cambia tema">Auto</button></div></header>
+<header><div><span class="ttl">Libreria Carte</span><span class="ver">v2.2</span></div><div><button id="inst">Installa</button><button id="thm" aria-label="Cambia tema">Auto</button></div></header>
 <nav>
 <button class="on" data-t="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></button>
 <button data-t="pre"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M3.5 6l1.5 1.5L7 5M3.5 12l1.5 1.5L7 11M3.5 18l1.5 1.5L7 17"/></svg><span>Prelievo</span></button>
@@ -115,6 +115,10 @@ setTimeout(function(){var s=document.getElementById('splash');if(s)s.remove()},1
 <div class="row"><input id="fbem" type="email" placeholder="Email"><input id="fbpw" type="password" placeholder="Password"></div>
 <div class="row"><button class="p" id="fbin">Accedi e sincronizza</button><button id="fbout">Esci</button></div>
 <p id="gst"></p>
+<h3>Backup automatici</h3>
+<small>Una copia al giorno nel cloud, al primo collegamento della giornata. Si tengono gli ultimi 7 giorni.</small>
+<div id="bklist"></div>
+<div class="row"><button id="bknow">Fai un backup adesso</button></div>
 <div class="row"><button id="fix">Aggiorna l'app (svuota la copia salvata)</button></div>
 <small>Se l'app resta ferma sul logo, apri nel browser l'indirizzo dell'app seguito da <b>?reset=1</b> (cancella solo i dati di questa app su questo dispositivo: tornano dal cloud) oppure <b>?safe=1</b> (parte senza collegarsi al cloud).</small>
 </section>

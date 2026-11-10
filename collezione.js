@@ -74,7 +74,8 @@ async function enrich(){
   $('#prog').textContent=uniq.length?'Categorie e anteprime aggiornate.':'';
 }
 async function preview(i){
-  const c=db.cards[i],inf=(db.info||{})[ik(c)],box=$('#pv');
+  const c=db.cards[i];if(!c)return;
+  const inf=(db.info||{})[ik(c)],box=$('#pv');
   box.style.display='flex';box.innerHTML='<small>Carico…</small>';
   if(H&&!(H.state&&H.state.pv))H.pushState({t:curTab,pv:1},'');
   if(document.body)document.body.style.overflow='hidden';
