@@ -175,3 +175,9 @@ body[data-tab="col"] .bg-simbolo,body[data-tab="cld"] .bg-simbolo{opacity:.07}
 @keyframes bgspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
 @keyframes bgpulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
 @media print{#bgart{display:none}}
+
+/* v2.5: entrata laterale delle schede con lo swipe */
+section.on.sw-r{animation:swr .3s cubic-bezier(.2,.8,.2,1)}
+section.on.sw-l{animation:swl .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes swr{from{opacity:0;transform:translateX(44px)}to{opacity:1;transform:none}}
+@keyframes swl{from{opacity:0;transform:translateX(-44px)}to{opacity:1;transform:none}}

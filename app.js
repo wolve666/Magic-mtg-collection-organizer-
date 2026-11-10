@@ -49,6 +49,7 @@ function go(t,fromPop){
   if(document.body&&document.body.dataset)document.body.dataset.tab=t;
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));
   document.querySelectorAll('section').forEach(e=>e.classList.toggle('on',e.id==t));
+  if(swipeDir){const s=$('#'+t),c='sw-'+swipeDir;if(s){s.classList.remove('sw-r');s.classList.remove('sw-l');void s.offsetWidth;s.classList.add(c);setTimeout(()=>s.classList.remove(c),400)}swipeDir=null}
   dbReady.then(()=>{
     if(t=='col'){colAnim=true;renderCol()}
     if(t=='home')renderHome();
@@ -58,6 +59,27 @@ function go(t,fromPop){
   if(window.scrollTo)window.scrollTo(0,0);
 }
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.t));
+/* Scorrimento tra le schede con uno swipe orizzontale */
+const ORD=['home','pre','col','ric','cld'];
+let swipeDir=null,sw0=null;
+if(typeof addEventListener=='function'){
+  addEventListener('touchstart',e=>{
+    sw0=null;if(e.touches.length!==1)return;
+    const p=e.touches[0],el=e.target;
+    if(p.clientX<24||p.clientX>innerWidth-24)return;           /* i bordi restano al gesto "indietro" del telefono */
+    if(el&&el.closest&&el.closest('input,textarea,select,.tw,#pv,.bsheet,#selbar,nav,.lbx'))return;
+    if((typeof openSh!='undefined'&&openSh)||($('#pv').style.display&&$('#pv').style.display!='none'))return;
+    sw0={x:p.clientX,y:p.clientY,t:Date.now()};
+  },{passive:true});
+  addEventListener('touchend',e=>{
+    if(!sw0)return;const s=sw0;sw0=null;
+    const p=e.changedTouches[0],dx=p.clientX-s.x,dy=p.clientY-s.y;
+    if(Date.now()-s.t>700||Math.abs(dx)<70||Math.abs(dx)<Math.abs(dy)*1.8)return;
+    const i=ORD.indexOf(curTab),j=i+(dx<0?1:-1);
+    if(i<0||j<0||j>=ORD.length)return;
+    swipeDir=dx<0?'r':'l';go(ORD[j]);
+  },{passive:true});
+}
 
 /* Scryfall */
 async function fetchCard(n){
