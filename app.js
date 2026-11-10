@@ -49,7 +49,7 @@ function go(t,fromPop){
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));
   document.querySelectorAll('section').forEach(e=>e.classList.toggle('on',e.id==t));
   dbReady.then(()=>{
-    if(t=='col')renderCol();
+    if(t=='col'){colAnim=true;renderCol()}
     if(t=='home')renderHome();
     if(t=='lab')renderLab(true);
     if(t=='cld'&&typeof renderBk=='function')renderBk();

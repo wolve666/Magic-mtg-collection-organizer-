@@ -13,7 +13,7 @@ const ik=c=>c.sid||(c.name+'|'+(c.set||''));
 function cat(t){t=(t||'').split(' // ')[0];
   return /Creature/.test(t)?'Creatura':/Planeswalker/.test(t)?'Planeswalker':/Battle/.test(t)?'Battaglia':/Land/.test(t)?'Terra':/Instant/.test(t)?'Istantaneo':/Sorcery/.test(t)?'Stregoneria':/Artifact/.test(t)?'Artefatto':/Enchantment/.test(t)?'Incantesimo':'Altro'}
 const picked=new Set();let shown=[];
-let colView='g';try{colView=localStorage.getItem('libview')||'g'}catch(e){}
+let colView='g',colAnim=true;try{colView=localStorage.getItem('libview')||'g'}catch(e){}
 function updSel(){
   const q=[...picked].reduce((s,c)=>s+c.qty,0),on=picked.size>0;
   $('#selc').textContent=on?`${picked.size} selezionate (${q} carte)`:'';
@@ -22,6 +22,7 @@ function updSel(){
 }
 function renderCol(){
   const f=key($('#cf').value),Nn=key($('#cfn').value),L=$('#cfl').value,E=$('#cfe').value,K=$('#cfc').value,G=$('#cg').value;
+  {const nf=[L,E,K,G].filter(Boolean).length,b=$('#fcount');b.textContent=nf||'';b.style.display=nf?'':'none'}
   const inf=c=>(db.info||{})[ik(c)]||{};
   const ct=c=>inf(c).t||'Non classificata';
   const sname=s=>(db.sn||{})[s]||s||'(senza set)';
@@ -39,18 +40,18 @@ function renderCol(){
   shown=rows.map(r=>r.c);{const all=new Set(db.cards);picked.forEach(c=>{if(!all.has(c))picked.delete(c)})}
   const V=colView,LIM=V=='g'?600:1000;
   let h='',last=null;
-  rows.slice(0,LIM).forEach(({c,i})=>{
+  rows.slice(0,LIM).forEach(({c,i},k)=>{
     if(G){const g=gk(c);if(g!==last){last=g;h+=V=='g'?`<div class="gh">${G=='e'?ssi(c.set):G=='c'?cti(g):''} ${esc(g)} · ${cnt[g]} carte</div>`:`<tr><th colspan="7" style="text-align:left;padding:12px 4px 4px;color:var(--ac)">${G=='e'?ssi(c.set):G=='c'?cti(g):''} ${esc(g)} · ${cnt[g]} carte</th></tr>`}}
     const im=inf(c).i,ck=picked.has(c)?'checked':'';
     h+=V=='g'
-      ?`<div class="cc ${ck?'on':''}"><div class="art" data-p="${i}">${im?`<img src="${esc(im)}" loading="lazy" alt="">`:''}${c.qty>1?`<span class="qb">×${c.qty}</span>`:''}<input type="checkbox" class="pk" data-i="${i}" ${ck} aria-label="Seleziona"></div><div class="cl"><span class="plate">${esc(c.loc||'–')}</span><span class="cn" data-p="${i}">${esc(c.name)}</span></div><div class="cm">${ssi(c.set)} ${esc(c.set)}${c.num?' #'+esc(c.num):''}${c.foil?' ✦'+c.foil:''} ${cti(ct(c))}</div></div>`
+      ?`<div class="cc ${ck?'on':''}${colAnim?' in':''}" style="--d:${Math.min(k,24)}"><div class="art" data-p="${i}">${im?`<img src="${esc(im)}" loading="lazy" alt="">`:''}${c.qty>1?`<span class="qb">×${c.qty}</span>`:''}<input type="checkbox" class="pk" data-i="${i}" ${ck} aria-label="Seleziona"></div><div class="cl"><span class="plate">${esc(c.loc||'–')}</span><span class="cn" data-p="${i}">${esc(c.name)}</span></div><div class="cm">${ssi(c.set)} ${esc(c.set)}${c.num?' #'+esc(c.num):''}${c.foil?' ✦'+c.foil:''} ${cti(ct(c))}</div></div>`
       :`<tr><td style="width:30px"><input type="checkbox" class="pk" data-i="${i}" ${ck}></td><td data-p="${i}" style="width:44px;cursor:pointer">${im?`<img src="${esc(im)}" loading="lazy" width="38" alt="" style="border-radius:3px;display:block">`:'🂠'}</td>
       <td data-p="${i}" style="cursor:pointer">${esc(c.name)}</td><td>${ssi(c.set)} ${esc(c.set)}${c.num?' #'+esc(c.num):''}${c.foil?' ✦'+c.foil:''}</td><td>${c.qty}×</td>
       <td><input class="le" size="6" value="${esc(c.loc)}" data-i="${i}"></td><td><button data-d="${i}">✕</button></td></tr>`;
   });
   $('#vg').className=V=='g'?'on':'';$('#vl').className=V=='g'?'':'on';
   $('#ct').innerHTML=`<small>${rows.length} righe · ${rows.reduce((s,r)=>s+r.c.qty,0)} carte${rows.length>LIM?` (mostro le prime ${LIM})`:''}${miss?` · ${miss} senza categoria/anteprima: tocca "Aggiorna info"`:''}</small>`+(V=='g'?`<div class="gridc">${h}</div>`:`<div class="tw"><table>${h}</table></div>`);
-  updSel();
+  updSel();colAnim=false;
 }
 async function enrich(){
   db.info=db.info||{};db.sn=db.sn||{};
@@ -91,6 +92,7 @@ function closePv(byTap){
 }
 $('#pv').onclick=()=>closePv(true);
 if(typeof addEventListener=='function')addEventListener('popstate',e=>{
+  if(openSh){closeSheet(false);return}
   const b=$('#pv');
   if(b.style.display&&b.style.display!='none'){closePv(false);return}
   const t=(e.state&&e.state.t)||'home';
@@ -110,7 +112,7 @@ $('#ct').onchange=e=>{
   if(e.target.className=='le'){db.cards[+e.target.dataset.i].loc=e.target.value.trim();save()}
   else if(e.target.className=='pk'){const c=db.cards[+e.target.dataset.i];e.target.checked?picked.add(c):picked.delete(c);const cc=e.target.closest&&e.target.closest('.cc');if(cc)cc.classList.toggle('on',e.target.checked);updSel()}
 };
-$('#selall').onclick=()=>{shown.forEach(c=>picked.add(c));renderCol()};
+$('#selall').onclick=()=>{shown.forEach(c=>picked.add(c));closeSheet(true);renderCol()};
 $('#selnone').onclick=()=>{picked.clear();renderCol()};
 $('#ba').onclick=()=>{
   const l=$('#bl').value.trim();
@@ -182,3 +184,25 @@ function importUrza(rows,H){
   });
   $('#prog').textContent=`Importate ${n} carte diverse (le facce posteriori delle carte doppie sono unite alla frontale).`;
 }
+
+/* Fogli a scomparsa: filtri, aggiunta carta, altre azioni (il tasto indietro li chiude) */
+let openSh=null;
+function openSheet(id){
+  closeSheet(false);openSh=id;$('#shbg').classList.add('on');$('#'+id).classList.add('on');
+  if(H)H.pushState({t:curTab,sh:id},'');
+}
+function closeSheet(byTap){
+  if(!openSh)return;
+  $('#'+openSh).classList.remove('on');$('#shbg').classList.remove('on');openSh=null;
+  if(byTap&&H&&H.state&&H.state.sh)H.back();
+}
+$('#fbtn').onclick=()=>openSheet('shFilt');
+$('#addbtn').onclick=()=>{openSheet('shAdd');setTimeout(()=>{try{$('#cn').focus()}catch(e){}},300)};
+$('#morebtn').onclick=()=>openSheet('shMore');
+$('#shbg').onclick=()=>closeSheet(true);
+$('#fdone').onclick=()=>closeSheet(true);
+document.querySelectorAll('.shx').forEach(b=>b.onclick=()=>closeSheet(true));
+$('#freset').onclick=()=>{['#cfe','#cfc','#cfl','#cg','#cf','#cfn'].forEach(x=>{$(x).value=''});colAnim=true;renderCol()};
+['#enr','#exp','#clr'].forEach(x=>$(x).addEventListener('click',()=>closeSheet(true)));
+$('#imp').addEventListener('change',()=>closeSheet(true));
+['#cfl','#cfe','#cfc','#cg'].forEach(x=>$(x).addEventListener('change',()=>{colAnim=true}));
