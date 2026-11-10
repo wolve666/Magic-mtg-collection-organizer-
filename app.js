@@ -46,6 +46,7 @@ const H=typeof history!='undefined'&&history.pushState?history:null;
 function go(t,fromPop){
   if(!fromPop&&t!==curTab&&H)H.pushState({t},'');
   curTab=t;
+  if(document.body&&document.body.dataset)document.body.dataset.tab=t;
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));
   document.querySelectorAll('section').forEach(e=>e.classList.toggle('on',e.id==t));
   dbReady.then(()=>{
